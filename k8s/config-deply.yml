@@ -1,0 +1,50 @@
+#버전
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-deployment
+  namespace: lgcns
+    
+
+spec: 
+  # 자원 공간의 낭비를 방지 및 관리의 편의성을 제공해주는 옵션
+  revisionHistoryLimit: 2
+
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config
+
+  template:
+    metadata:
+      labels:
+        app: config
+
+    spec:
+    #docker container
+      containers:
+      - name: config-container
+        # ERC 경로
+        image: 933090817123.dkr.ecr.us-east-2.amazonaws.com/config-server:latest
+        ports:
+          - containerPort: 8080
+  
+
+---  #구분 지어야 함
+
+#core service setting
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: config-service
+  namespace: lgcns
+
+spec: 
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080        # container port를 의미*
+  selector:
+    app: config    #selector의 name
