@@ -47,5 +47,5 @@ jobs:
 
       - name: eks kubectl order apply
         run: |
-          kubectl apply -f ./config-deply.yml
+          kubectl apply -f ./k8s/config-deply.yml
           kubectl rollout restart deployment config-deployment -n lgcns
